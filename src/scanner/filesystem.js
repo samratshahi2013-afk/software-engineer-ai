@@ -52,5 +52,3 @@ function walk(currentPath, result) {
 module.exports = {
     scanDirectory
 };
-    scanDirectory
-;

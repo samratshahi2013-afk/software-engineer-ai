@@ -1,7 +1,21 @@
+const Repository = require("./repository");
 const { scanDirectory } = require("./scanner/filesystem");
+const { buildReport } = require("./scanner/report");
+const { detectProject } = require("./scanner/detector");
 
-const report = scanDirectory(".");
+const repository = new Repository(".");
+const scan = scanDirectory(".");
 
-console.log("Files:", report.files.length);
-console.log("Directories:", report.directories.length);
-console.log("Ignored:", report.ignored.length);
+repository.files = buildReport(scan);
+repository.directories = scan.directories;
+
+repository.updateStatistics();
+repository.detectLanguages();
+repository.loadFileContents();
+
+const projectInfo = detectProject(".");
+
+repository.frameworks = projectInfo.frameworks;
+repository.dependencies = projectInfo.dependencies;
+
+console.log(repository);
